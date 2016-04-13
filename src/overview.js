@@ -12,9 +12,10 @@ export class Overview {
   }
 
   startpolling() {
+    this.blockRequests = false;
     this.timer = setInterval(() => {
       this.executePoll();
-    }, 1000);
+    }, 100);
     this.pollingStatus = 'Active';
   }
 
@@ -24,10 +25,15 @@ export class Overview {
   }
 
   executePoll() {
+    if (this.blockRequests) {
+      return;
+    }
+    this.blockRequests = true;
     this.fillNamespaces(() => {
       this.fillTopics(() => {
         this.fillSubscriptions(() => {
           this.namespaces = this.bufferedNamespaces;
+          this.blockRequests = false;
         });
       });
     });
