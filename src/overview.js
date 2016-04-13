@@ -13,20 +13,21 @@ export class Overview {
 
   startpolling() {
     this.timer = setInterval(() => {
-      this.executePoll(this);
-    }, 2000);
+      this.executePoll();
+    }, 1000);
     this.pollingStatus = 'Active';
   }
 
   stoppolling() {
-    //clearInterval(this.timer);
+    clearInterval(this.timer);
     this.pollingStatus = 'Idle';
   }
 
-  executePoll(self) {
-    self.fillNamespaces(() => {
-      self.fillTopics(() => {
-        self.fillSubscriptions(() => {
+  executePoll() {
+    this.fillNamespaces(() => {
+      this.fillTopics(() => {
+        this.fillSubscriptions(() => {
+          this.namespaces = this.bufferedNamespaces;
         });
       });
     });
@@ -39,14 +40,15 @@ export class Overview {
       })
       .then((result) => {
         if (result !== undefined) {
-          this.namespaces = result.namespaces;
+          this.bufferedNamespaces = result.namespaces;
           return next();
         }
       });
   }
 
   fillTopics(next) {
-    _.forEach(this.namespaces, (namespace) => {
+    let counter = 0;
+    _.forEach(this.bufferedNamespaces, (namespace) => {
       return this.http.fetch(`${namespace.name}/topics`)
         .then((response) => {
           return response.json();
@@ -54,16 +56,21 @@ export class Overview {
         .then((result) => {
           if (result !== undefined) {
             namespace.topics = result.topics;
-            return next();
+            if (++counter === this.bufferedNamespaces.length) {
+              return next();
+            }
           }
         });
     });
-    return next();
   }
 
   fillSubscriptions(next) {
-    _.forEach(this.namespaces, (namespace) => {
+    let counter = 0;
+    let endCounter = 0;
+    _.forEach(this.bufferedNamespaces, (namespace) => {
+      // endCounter += namespace.topics.length;
       _.forEach(namespace.topics, (topic) => {
+        endCounter++;
         return this.http.fetch(`${namespace.name}/${topic.name}/subscriptions`)
           .then((response) => {
             return response.json();
@@ -71,11 +78,12 @@ export class Overview {
           .then((result) => {
             if (result !== undefined) {
               topic.subscriptions = result.subscriptions;
-              return next();
+              if (++counter === endCounter) {
+                return next();
+              }
             }
           });
       });
     });
-    return next();
   }
 }
