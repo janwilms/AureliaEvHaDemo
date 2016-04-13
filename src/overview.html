@@ -13,13 +13,13 @@
       <div class="panel-body">
         <ul>
           <li repeat.for="namespace of namespaces">
-            ${namespace.name}
+            <span class="greenFlash">${namespace.name}</span>
             <ul>
               <li repeat.for="topic of namespace.topics">
-                ${topic.name}
+                <span class="greenFlash">${topic.name}</span>
                 <ul>
                   <li repeat.for="sub of topic.subscriptions">
-                    ${sub.name} (${sub.topic})
+                    <span class="greenFlash">${sub.name} (${sub.topic})</span>
                   </li>
                 </ul>
               </li>

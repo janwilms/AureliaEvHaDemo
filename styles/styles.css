@@ -173,3 +173,61 @@ div.au-stagger {
     opacity: 1;
   }
 }
+
+.greenFlash {
+  -moz-animation-name: greenFlasher;
+  -moz-animation-iteration-count: 1;
+  -moz-animation-timing-function: ease-out;
+  -moz-animation-duration: 2s;
+
+  -webkit-animation-name: greenFlasher;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease-out;
+  -webkit-animation-duration: 2s;
+
+  -ms-animation-name: greenFlasher;
+  -ms-animation-iteration-count: 1;
+  -ms-animation-timing-function: ease-out;
+  -ms-animation-duration: 2s;
+
+  -o-animation-name: greenFlasher;
+  -o-animation-iteration-count: 1;
+  -o-animation-timing-function: ease-out;
+  -o-animation-duration: 2s;
+}
+
+@-moz-keyframes greenFlasher {
+  0% {
+    background-color: #0F0;
+  }
+  100% {
+      background-color: transparent;
+  }
+}
+
+@-webkit-keyframes greenFlasher {
+  0% {
+    background-color: #0F0;
+  }
+  100% {
+      background-color: transparent;
+  }
+}
+
+@-ms-keyframes greenFlasher {
+  0% {
+    background-color: #0F0;
+  }
+  100% {
+      background-color: transparent;
+  }
+}
+
+@-o-keyframes greenFlasher {
+  0% {
+    background-color: #0F0;
+  }
+  100% {
+      background-color: transparent;
+  }
+}
